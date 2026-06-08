@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результат — {{ top_emotion }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>😊 Распознавание эмоций</h1>
+            <p class="subtitle">Результат анализа</p>
+        </header>
+
+        <div class="result-grid">
+            <div class="result-photo">
+                <img src="{{ url_for('static', filename='uploads/' + image_path.split('/')[-1]) }}"
+                     alt="загруженное фото" class="uploaded-img">
+            </div>
+
+            <div class="result-info">
+                <div class="top-emotion">
+                    <span class="emoji-big">{{ top_emoji }}</span>
+                    <div>
+                        <div class="emotion-name">{{ top_emotion }}</div>
+                        <div class="confidence">Уверенность: {{ confidence }}%</div>
+                    </div>
+                </div>
+
+                <div class="bars">
+                    {% for p in predictions %}
+                    <div class="bar-row">
+                        <span class="bar-emoji">{{ p.emoji }}</span>
+                        <span class="bar-label">{{ p.label_ru }}</span>
+                        <div class="bar-track">
+                            <div class="bar-fill {% if loop.first %}bar-top{% endif %}"
+                                 style="width: {{ p.score }}%"></div>
+                        </div>
+                        <span class="bar-pct">{{ p.score }}%</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <a href="/" class="btn-back">← Загрузить другое фото</a>
+    </div>
+</body>
+</html>

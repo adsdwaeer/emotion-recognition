@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Распознавание эмоций</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>😊 Распознавание эмоций</h1>
+            <p class="subtitle">Загрузите фотографию лица — модель определит эмоцию</p>
+            <p class="model-badge">Модель: Hugging Face · dima806/facial_emotions_image_detection · ViT</p>
+        </header>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <div class="upload-box">
+            <form action="/predict" method="POST" enctype="multipart/form-data" id="upload-form">
+                <label class="drop-area" for="file-input">
+                    <div class="drop-icon">📂</div>
+                    <div class="drop-text">Перетащите фото сюда или нажмите для выбора</div>
+                    <div class="drop-hint">JPG, PNG, WEBP · до 10 МБ</div>
+                    <input type="file" id="file-input" name="file"
+                           accept=".jpg,.jpeg,.png,.webp" hidden>
+                </label>
+                <div id="preview-wrap" style="display:none">
+                    <img id="preview" src="" alt="предпросмотр">
+                </div>
+                <button type="submit" class="btn-submit" id="submit-btn" disabled>
+                    Определить эмоцию
+                </button>
+            </form>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">😠<br>Злость</div>
+            <div class="info-card">🤢<br>Отвращение</div>
+            <div class="info-card">😨<br>Страх</div>
+            <div class="info-card">😊<br>Радость</div>
+            <div class="info-card">😐<br>Нейтрально</div>
+            <div class="info-card">😢<br>Грусть</div>
+            <div class="info-card">😲<br>Удивление</div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('file-input');
+        const preview = document.getElementById('preview');
+        const previewWrap = document.getElementById('preview-wrap');
+        const submitBtn = document.getElementById('submit-btn');
+
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                previewWrap.style.display = 'block';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
